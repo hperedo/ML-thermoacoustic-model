@@ -4,7 +4,7 @@
 
 This document describes the evolution of the approach presented in the publication [MDPI Applied Sciences, Vol 14, Issue 22, Article 10470](https://www.mdpi.com/2076-3417/14/22/10470) into a Machine Learning (ML) model. The original work focuses on using the Linear Theory of Thermoacoustics (LTT) to calculate and optimize the Coefficient of Performance (COP) in thermoacoustic systems.
 
-By integrating ML techniques, we aim to:
+By integrating ML techniques, it aims to:
 
 - Improve the accuracy and efficiency of COP prediction.
 - Optimize key design parameters using data-driven insights.
