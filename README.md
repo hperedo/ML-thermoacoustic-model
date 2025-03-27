@@ -1,4 +1,4 @@
-# Machine Learning Approach for Thermoacoustic COP Optimization in MATLAB
+# Machine Learning Approach for Thermoacoustic COP Optimization in MATLAB and Python
 
 ## Overview
 
@@ -571,3 +571,72 @@ Neural Network - RMSE: 0.0187, R²: 0.98
 ✅ More efficient ML tuning using expected-improvement-plus for optimization.
 
 ✅ Visualization of model performance with scatter plots.
+
+# Proposed Python code using equivalent libraries such as scikit-learn, optuna for Bayesian optimization, and tensorflow for neural networks.
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVR
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.neural_network import MLPRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+import optuna
+
+# Load dataset
+data = pd.read_csv('thermoacoustic_data.csv')  # Adjust to actual dataset
+X = data[['frequency', 'stack_length', 'stack_position', 'pressure', 'temp_ratio']]
+y = data['COP']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Define models
+def train_model(model, X_train, y_train, X_test, y_test):
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score(y_test, y_pred)
+    return rmse, r2, y_pred
+
+# Model selection and tuning with Optuna
+models = {
+    'SVR': SVR(kernel='rbf', C=1, epsilon=0.1),
+    'RandomForest': RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42),
+    'GBM': GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42),
+    'NeuralNetwork': MLPRegressor(hidden_layer_sizes=(50, 50), activation='relu', max_iter=1000, random_state=42)
+}
+
+results = {}
+for name, model in models.items():
+    rmse, r2, _ = train_model(model, X_train, y_train, X_test, y_test)
+    results[name] = {'RMSE': rmse, 'R2': r2}
+
+# Bayesian Optimization using Optuna
+def objective(trial):
+    model_type = trial.suggest_categorical('model', ['SVR', 'RandomForest', 'GBM', 'NeuralNetwork'])
+    if model_type == 'SVR':
+        model = SVR(kernel='rbf', C=trial.suggest_loguniform('C', 0.1, 10), epsilon=trial.suggest_loguniform('epsilon', 0.01, 1))
+    elif model_type == 'RandomForest':
+        model = RandomForestRegressor(n_estimators=trial.suggest_int('n_estimators', 50, 200), max_depth=trial.suggest_int('max_depth', 3, 20))
+    elif model_type == 'GBM':
+        model = GradientBoostingRegressor(n_estimators=trial.suggest_int('n_estimators', 50, 200), learning_rate=trial.suggest_loguniform('learning_rate', 0.01, 0.5), max_depth=trial.suggest_int('max_depth', 3, 10))
+    else:
+        model = MLPRegressor(hidden_layer_sizes=(trial.suggest_int('neurons', 10, 100), trial.suggest_int('neurons', 10, 100)), activation='relu', max_iter=1000)
+    
+    rmse, r2, _ = train_model(model, X_train, y_train, X_test, y_test)
+    return rmse
+
+study = optuna.create_study(direction='minimize')
+study.optimize(objective, n_trials=50)
+
+print("Best model and parameters:", study.best_params)
+
+
+```
+
