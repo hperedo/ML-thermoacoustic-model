@@ -193,7 +193,7 @@ grid on;
    - Try more advanced models, like Support Vector Regression (SVR) or Neural Networks.
    - Perform hyperparameter tuning for model optimization.
 
-# To enhance the Machine Learning (ML) model for predicting the Coefficient of Performance (COP) in thermoacoustics, we can implement the following improvements:
+# To enhance the Machine Learning (ML) model for predicting the Coefficient of Performance (COP) in thermoacoustics, it can be implemented the following improvements:
 
  ## Enhancements to the Model
    - Use a Neural Network (Deep Learning Model) for complex relationships.
@@ -302,7 +302,7 @@ grid on;
   - Test additional ML models, such as Gradient Boosting or Deep Neural Networks.
   - Fine-tune hyperparameters using bayesopt for better accuracy.
 
-# Updated MATLAB code: including multiple ML models (SVR, Neural Networks, Decision Trees, Gradient Boosting) and performing hyperparameter tuning to determine the best model based on accuracy (R² and RMSE).
+# To Update MATLAB code: includes multiple ML models (SVR, Neural Networks, Decision Trees, Gradient Boosting) and performe hyperparameter tuning to determine the best model based on accuracy (R² and RMSE).
 
 ## Steps in This Code:
   
